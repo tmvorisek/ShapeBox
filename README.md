@@ -13,6 +13,8 @@
 
 ```
 
+Authors: Todd Vorisek, Cameron Titus, Aj Carvajal
+
 This is the repo for a C++ library for creating PostScript files through literal words 
 IE : You can say "Box on top of Triangle on top of circle" to generate a document that has those shapes and can be printed on any printer.
 
@@ -33,6 +35,8 @@ Shape -> Circle
       
       -> Triangle
       
+      -> VerticalShape
+      
       -> Custom shape (TBD)
  
 Circle -> "0 0" Number "0 360 arc"
@@ -42,3 +46,5 @@ Spacer -> Number Number "moveto"
 Number  -> 0  
         -> 1  
         -> 2 
+        
+VerticalShape -> Number "0" "moveto"
