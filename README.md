@@ -21,12 +21,24 @@ The idea of the project is to learn/practice more design patterns such as the in
 
 Grammar :
 
-Shape -> Circle
+Shape -> Circle  
 
-      -> Polygon
+      -> Polygon  
       
-      -> Rectangle
+      -> Rectangle  
+      
       -> Spacer
+      
       -> Square
+      
       -> Triangle
+      
       -> Custom shape (TBD)
+ 
+Circle -> "0 0" Number "0 360 arc"
+ 
+Spacer -> Number Number "moveto"
+
+Number  -> 0  
+        -> 1  
+        -> 2 
