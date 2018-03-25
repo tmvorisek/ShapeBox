@@ -53,5 +53,5 @@ public:
 	Vertical(std::vector<std::unique_ptr<Shape>> shapes);
 	virtual std::string toPostScript();
 private:
-	std::unique_ptr<Shape> _shapes;
+	std::vector<std::unique_ptr<Shape>> _shapes;
 };
