@@ -76,7 +76,7 @@ std::string Vertical::toPostScript()
 
 	for (auto & i : _shapes)
 	{
-		os<< i.toPostScript();
+		os << i->toPostScript();
 		//move origin based on current Shape's bounding box
 		//do this by drawing an invisible spacer?
 	}
