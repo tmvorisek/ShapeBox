@@ -10,8 +10,8 @@ public:
 	virtual ~Shape();
 	virtual std::string toPostScript() = 0;
 };
-//epooopop
-//test
+
+
 /////////////////////
 //basic shape classes
 /////////////////////
