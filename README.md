@@ -23,7 +23,7 @@ The idea of the project is to learn/practice more design patterns such as the in
 
 Grammar :
 
-Shape -> Circle | Polygon | Rectangle | Spacer | Square | Triangle | VerticalShape | Custom Shape (TBD) 
+Shape -> Circle | Polygon | Rectangle | Spacer | Square | Triangle | VerticalShape | HorizontalShape | OverlapShape |Custom Shape (TBD) 
  
 Circle -> "0 0" Number "0 360 arc"
  
