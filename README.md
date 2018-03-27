@@ -29,8 +29,8 @@ Circle -> "0 0" Number "0 360 arc"
  
 Spacer -> Number Number "moveto"
 
-Number  -> 0  
-        -> 1  
-        -> 2 
+Number  -> 0|1|2|3|...  
         
-VerticalShape -> Number "0" "moveto"
+VerticalShape -> Shape Number "0" "moveto"
+
+HorizontalShape -> Shape "0" Number "moveto" 
