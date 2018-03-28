@@ -118,8 +118,13 @@ double Vertical::width() const
 }
 
 double Vertical::height() const
-{
-	return 1;
+{	
+	double total =0;
+	for (auto const &shape: _shapes) 
+	{
+		total+=shape->height;
+	}
+	return total;
 }
 
 Scale::Scale(std::unique_ptr<Shape> shape, double fx, double fy): _shape(std::move(shape)), _fx(fx), _fy(fy)
