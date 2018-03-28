@@ -65,3 +65,13 @@ public:
 private:
 	std::vector<std::unique_ptr<Shape>> _shapes;
 };
+
+class Scale : public Shape
+{
+public:
+	Scale(std::unique_ptr<Shape> shape, double fx, double fy);
+	virtual std::string toPostScript() override;
+private:
+	std::unique_ptr<Shape> _shape;
+	double _fx, _fy;
+};
