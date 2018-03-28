@@ -9,7 +9,7 @@ Shape::~Shape() = default;
 Spacer::Spacer(double width, double height) : _width(width), _height(height)
 {}
 
-std::string Spacer::toPostScript()
+std::string Spacer::toPostScript() const
 {
 	std::ostringstream os;
 
@@ -25,13 +25,24 @@ std::string Spacer::toPostScript()
 	return os.str();
 }
 
+double Spacer::width() const
+{
+	return _width;
+}
+
+double Spacer::height() const
+{
+	return _height;
+}
+
+
 ////////////////////////
 //Rectangle definitions
 ////////////////////////
 Rectangle::Rectangle(double width, double height): _width(width),_height(height)
 {}
 
-std::string Rectangle::toPostScript()
+std::string Rectangle::toPostScript() const
 {
 	std::ostringstream os;
 
@@ -47,13 +58,23 @@ std::string Rectangle::toPostScript()
 	return os.str();
 }
 
+double Rectangle::width() const
+{
+	return _width;
+}
+
+double Rectangle::height() const
+{
+	return _height;
+}
+
 ////////////////////////
 //Circle definitions
 ////////////////////////
 Circle::Circle(double radius) :_radius(radius)
 {}
 
-std::string Circle::toPostScript()
+std::string Circle::toPostScript() const
 {
 	std::ostringstream os;
 
@@ -64,13 +85,24 @@ std::string Circle::toPostScript()
 	return os.str();
 }
 
+double Circle::width() const
+{
+	return 2*_radius;
+}
+
+double Circle::height() const
+{
+	return 2*_radius;
+}
+
+
 ////////////////////////
 //Vertical definitions
 ////////////////////////
 Vertical::Vertical(std::vector<std::unique_ptr<Shape>> shapes) :_shapes(std::move(shapes))
 {}
 
-std::string Vertical::toPostScript()
+std::string Vertical::toPostScript() const
 {
 	std::ostringstream os;
 
@@ -82,4 +114,14 @@ std::string Vertical::toPostScript()
 	}
 
 	return os.str();
+}
+
+double Vertical::width() const
+{
+	return 1;
+}
+
+double Vertical::height() const
+{
+	return 1;
 }
