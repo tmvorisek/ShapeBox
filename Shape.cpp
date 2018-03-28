@@ -13,12 +13,12 @@ std::string Spacer::toPostScript() const
 {
 	std::ostringstream os;
 
-	os  //<< "newpath 72 72 moveto " //this line might need to be handled by a wrapper function when making complex shapes
+	os  << "newpath " // 72 72 moveto " //this line might need to be handled by a wrapper function when making complex shapes
 
-		<< 72 * _width << " 0 rlineto " //bottom
-		<< " 0 " << 72 * _height << " rlineto " //right
-		<< -72 * _width << " 0 rlineto " //top
-		<< " closepath "; //completes left side, but doesnt draw
+		<< _width << " 0 rlineto \n" //bottom
+		<< " 0 " << _height << " rlineto \n" //right
+		<< _width << " 0 rlineto \n" //top
+		<< " closepath \n"; //completes left side, but doesnt draw
 
 		//<< "showpage"; //this line will probably go into the wrapper function
 
@@ -46,14 +46,12 @@ std::string Rectangle::toPostScript() const
 {
 	std::ostringstream os;
 
-	os  //<< "newpath 72 72 moveto " //this line might need to be handled by a wrapper function when making complex shapes
-
-		<< 72 * _width << " 0 rlineto " //bottom
-		<< " 0 " << 72 * _height << " rlineto " //right
-		<< -72 * _width << " 0 rlineto " //top
-		<< " closepath stroke "; //left and draw
-
-		//<< "showpage"; //this line will probably go into the wrapper function
+	os << "gsave \n"
+		<< _width << " 0 rlineto \n" //bottom
+		<< " 0 " << _height << " rlineto \n" //right
+		<< _width << " 0 rlineto \n" //top
+		<< "  stroke \n" //left
+		<< "grestore \n";
 
 	return os.str();
 }
@@ -78,9 +76,7 @@ std::string Circle::toPostScript() const
 {
 	std::ostringstream os;
 
-	os << " 0 0 " //origin of the circle. this needs to be able to change for complex shapes
-		<< 72 * _radius 
-		<< " 0 360 arc stroke ";
+	os << " currentpoint " << _radius << " 0 360 arc stroke \n";
 
 	return os.str();
 }
@@ -124,4 +120,17 @@ double Vertical::width() const
 double Vertical::height() const
 {
 	return 1;
+}
+
+Scale::Scale(std::unique_ptr<Shape> shape, double fx, double fy): _shape(std::move(shape)), _fx(fx), _fy(fy)
+{}
+
+std::string Scale::toPostScript()
+{
+	std::ostringstream os;
+
+	os << _fx << " " << _fy << " scale \n";
+	_shape->toPostScript();
+
+	return os.str();
 }
