@@ -119,10 +119,10 @@ double Vertical::width() const
 
 double Vertical::height() const
 {	
-	double total =0;
-	for (auto const &shape: _shapes) 
+	double total = 0.0;
+	for (auto &shape: _shapes) 
 	{
-		total+=shape->height;
+		total += shape->height();
 	}
 	return total;
 }
@@ -130,12 +130,12 @@ double Vertical::height() const
 Scale::Scale(std::unique_ptr<Shape> shape, double fx, double fy): _shape(std::move(shape)), _fx(fx), _fy(fy)
 {}
 
-std::string Scale::toPostScript()
-{
-	std::ostringstream os;
+// std::string Scale::toPostScript()
+// {
+// 	std::ostringstream os;
 
-	os << _fx << " " << _fy << " scale \n";
-	_shape->toPostScript();
+// 	os << _fx << " " << _fy << " scale \n";
+// 	_shape->toPostScript();
 
-	return os.str();
-}
+// 	return os.str();
+// }
