@@ -13,14 +13,13 @@ std::string Spacer::toPostScript() const
 {
 	std::ostringstream os;
 
-	os  << "newpath " // 72 72 moveto " //this line might need to be handled by a wrapper function when making complex shapes
-
+	os << "gsave \n"
+		<< -_width / 2 << " " << -_height / 2 << " rmoveto \n"
 		<< _width << " 0 rlineto \n" //bottom
 		<< " 0 " << _height << " rlineto \n" //right
 		<< _width << " 0 rlineto \n" //top
-		<< " closepath \n"; //completes left side, but doesnt draw
-
-		//<< "showpage"; //this line will probably go into the wrapper function
+		<< " 0 " << -_height << " rlineto \n"  //left 
+		<< "grestore \n";
 
 	return os.str();
 }
@@ -39,18 +38,21 @@ double Spacer::height() const
 ////////////////////////
 //Rectangle definitions
 ////////////////////////
-Rectangle::Rectangle(double width, double height): _width(width),_height(height)
+Rectangle::Rectangle(double width, double height) : _width(width), _height(height)
 {}
 
 std::string Rectangle::toPostScript() const
 {
 	std::ostringstream os;
 
-	os << "gsave \n"
+	os
+		<< "gsave \n"
+		<< -_width / 2 << " " << -_height / 2 << " rmoveto \n"  //move to origin
 		<< _width << " 0 rlineto \n" //bottom
 		<< " 0 " << _height << " rlineto \n" //right
 		<< _width << " 0 rlineto \n" //top
-		<< "  stroke \n" //left
+		<< " 0 " << -_height << " rlineto \n"  //left 
+		<< "  stroke \n"
 		<< "grestore \n";
 
 	return os.str();
@@ -83,12 +85,12 @@ std::string Circle::toPostScript() const
 
 double Circle::width() const
 {
-	return 2*_radius;
+	return 2 * _radius;
 }
 
 double Circle::height() const
 {
-	return 2*_radius;
+	return 2 * _radius;
 }
 
 
@@ -102,11 +104,11 @@ std::string Vertical::toPostScript() const
 {
 	std::ostringstream os;
 
+	os << _height << " 0 rmoveto \n";
+
 	for (auto & i : _shapes)
 	{
 		os << i->toPostScript();
-		//move origin based on current Shape's bounding box
-		//do this by drawing an invisible spacer?
 	}
 
 	return os.str();
@@ -114,20 +116,29 @@ std::string Vertical::toPostScript() const
 
 double Vertical::width() const
 {
-	return 1;
+	// width for vertical shape = width of the widest shape
+	double result = 0;
+
+	for (auto & shape : _shapes)
+	{
+		if (result < shape->width())
+			result = shape->width();
+	}
+
+	return result;
 }
 
 double Vertical::height() const
-{	
+{
 	double total = 0.0;
-	for (auto &shape: _shapes) 
+	for (auto &shape : _shapes)
 	{
 		total += shape->height();
 	}
 	return total;
 }
 
-Scale::Scale(std::unique_ptr<Shape> shape, double fx, double fy): _shape(std::move(shape)), _fx(fx), _fy(fy)
+Scale::Scale(std::unique_ptr<Shape> shape, double fx, double fy) : _shape(std::move(shape)), _fx(fx), _fy(fy)
 {}
 
 // std::string Scale::toPostScript()
