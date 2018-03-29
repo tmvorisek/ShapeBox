@@ -7,18 +7,21 @@
 #include "Shape.h"
 
 
-TEST_CASE( "Circle of positive radius height and width", "[multi-file:1]" ) {
+TEST_CASE( "Circle height and width", "[multi-file:1]" ) {
   REQUIRE (Circle(1).height() == 2);
   REQUIRE (Circle(1).width() == 2);
   REQUIRE (Circle(4).width() == 8);
   REQUIRE (Circle(4).height() == 8);
   REQUIRE (Circle(100).width() == 200);
   REQUIRE (Circle(100).height() == 200);
-}
-
-TEST_CASE ( "Circle of negative radius") {
   REQUIRE (Circle(-1).width() == -2.0);
   REQUIRE (Circle(-1).height() == -2.0);
+}
+
+TEST_CASE ( "Circle to PostScript") {
+  //std::vector<std::string> testShapes;
+  //testShapes.emplace_back(Circle(1).toPostScript());
+  REQUIRE (Circle(1).toPostScript() == " currentpoint 1 0 360 arc stroke \n");
 }
 
 TEST_CASE ( "Vertical shape of 2 shapes height and width") {
