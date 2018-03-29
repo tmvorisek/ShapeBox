@@ -7,7 +7,7 @@ vertical, horizontal, scale
 wrapper functions
 
 Cam
-square, rotated
+rectangle, square is subclass of rectangle, rotated
 page funcitaon
 
 Todd
