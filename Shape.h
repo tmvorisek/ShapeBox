@@ -64,6 +64,7 @@ public:
 	virtual double height() const override;
 private:
 	std::vector<std::unique_ptr<Shape>> _shapes;
+	double _width, _height;
 };
 
 class Scale : public Shape
