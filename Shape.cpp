@@ -17,7 +17,7 @@ std::string Spacer::toPostScript() const
 		<< -_width / 2 << " " << -_height / 2 << " rmoveto \n"
 		<< _width << " 0 rlineto \n" //bottom
 		<< " 0 " << _height << " rlineto \n" //right
-		<< _width << " 0 rlineto \n" //top
+		<< -_width << " 0 rlineto \n" //top
 		<< " 0 " << -_height << " rlineto \n"  //left 
 		<< "grestore \n";
 
@@ -50,7 +50,7 @@ std::string Rectangle::toPostScript() const
 		<< -_width / 2 << " " << -_height / 2 << " rmoveto \n"  //move to origin
 		<< _width << " 0 rlineto \n" //bottom
 		<< " 0 " << _height << " rlineto \n" //right
-		<< _width << " 0 rlineto \n" //top
+		<< -_width << " 0 rlineto \n" //top
 		<< " 0 " << -_height << " rlineto \n"  //left 
 		<< "  stroke \n"
 		<< "grestore \n";
@@ -71,20 +71,21 @@ double Rectangle::height() const
 ////////////////////////
 //Square definitions
 ////////////////////////
-
-Square::Square(double length):Rectangle(length, length){}
+Square::Square(double length) :Rectangle(length, length) {}
 
 ////////////////////////
 //Circle definitions
 ////////////////////////
-Circle::Circle(double radius) :_radius(radius)
+Circle::Circle(double radius) : _radius(radius)
 {}
 
 std::string Circle::toPostScript() const
 {
 	std::ostringstream os;
-
-	os << " currentpoint " << _radius << " 0 360 arc stroke \n";
+	 
+	os << "gsave \n" //compound shapes break if you dont have gsave and restore
+		<< " currentpoint " << _radius << " 0 360 arc stroke \n"
+		<< "grestore \n";
 
 	return os.str();
 }
@@ -110,11 +111,12 @@ std::string Vertical::toPostScript() const
 {
 	std::ostringstream os;
 
-	os << _height << " 0 rmoveto \n";
-
-	for (auto & i : _shapes)
+	for (int i = 0; i < _shapes.size(); ++i)
 	{
-		os << i->toPostScript();
+		os << _shapes[i]->toPostScript();
+
+		if(i != _shapes.size() - 1)
+			os << " 0 " << (_shapes[i]->height() / 2) + (_shapes[i + 1]->height() / 2) << " rmoveto \n";
 	}
 
 	return os.str();
@@ -139,7 +141,7 @@ double Vertical::height() const
 	double total = 0.0;
 	for (auto &shape : _shapes)
 	{
-		total += shape->height();
+		total = shape->height(); //changed this to be the last items height, so it can be used for stacking vertical
 	}
 	return total;
 }
