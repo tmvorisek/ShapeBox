@@ -69,6 +69,12 @@ double Rectangle::height() const
 }
 
 ////////////////////////
+//Square definitions
+////////////////////////
+
+Square::Square(double length):Rectangle(length, length){}
+
+////////////////////////
 //Circle definitions
 ////////////////////////
 Circle::Circle(double radius) :_radius(radius)

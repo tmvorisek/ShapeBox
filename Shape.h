@@ -40,6 +40,11 @@ private:
 	double _width, _height;
 };
 
+class Square: public Rectangle
+{
+	Square(double length);
+};
+
 
 class Circle : public Shape
 {
