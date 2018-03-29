@@ -124,27 +124,43 @@ std::string Vertical::toPostScript() const
 
 double Vertical::width() const
 {
-	// width for vertical shape = width of the widest shape
-	double result = 0;
-
-	for (auto & shape : _shapes)
-	{
-		if (result < shape->width())
-			result = shape->width();
-	}
-
-	return result;
+	return _shapes.back()->width();
 }
 
 double Vertical::height() const
 {
-	double total = 0.0;
-	for (auto &shape : _shapes)
-	{
-		total = shape->height(); //changed this to be the last items height, so it can be used for stacking vertical
-	}
-	return total;
+	return _shapes.back()->height();
 }
+
+Horizontal::Horizontal(std::vector<std::unique_ptr<Shape>> shapes) :_shapes(std::move(shapes))
+{}
+
+std::string Horizontal::toPostScript() const
+{
+	std::ostringstream os;
+
+	for (int i = 0; i < _shapes.size(); ++i)
+	{
+		os << _shapes[i]->toPostScript();
+
+		if (i != _shapes.size() - 1)
+			os << (_shapes[i]->width() / 2) + (_shapes[i + 1]->width() / 2) << " 0 rmoveto \n";
+	}
+
+	return os.str();
+}
+
+double Horizontal::width() const
+{
+	return _shapes.back()->height();
+}
+
+double Horizontal::height() const
+{
+
+	return _shapes.back()->height();
+}
+
 
 Scale::Scale(std::unique_ptr<Shape> shape, double fx, double fy) : _shape(std::move(shape)), _fx(fx), _fy(fy)
 {}
