@@ -128,6 +128,7 @@ double Polygon::height() const
 ////////////////////////
 //Vertical definitions
 ////////////////////////
+
 Vertical::Vertical(std::vector<std::unique_ptr<Shape>> shapes) :_shapes(std::move(shapes))
 {}
 
@@ -135,6 +136,8 @@ std::string Vertical::toPostScript() const
 {
 	std::ostringstream os;
 
+	os << "gsave \n";
+	os << " 0 " << -height()/2 << " rmoveto \n"; //center object
 	for (int i = 0; i < _shapes.size(); ++i)
 	{
 		os << _shapes[i]->toPostScript();
@@ -142,18 +145,34 @@ std::string Vertical::toPostScript() const
 		if(i != _shapes.size() - 1)
 			os << " 0 " << (_shapes[i]->height() / 2) + (_shapes[i + 1]->height() / 2) << " rmoveto \n";
 	}
+	os << "grestore \n";
+
 
 	return os.str();
 }
 
 double Vertical::width() const
 {
-	return _shapes.back()->width();
+	//width for vertical shape = width of the widest shape
+	double result = 0;
+
+	for (auto & shape : _shapes)
+	{
+		if (result < shape->width())
+			result = shape->width();
+	}
+
+	return result;
 }
 
 double Vertical::height() const
 {
-	return _shapes.back()->height();
+	double total = 0;
+	for (auto &shape : _shapes)
+	{
+		total += shape->height();
+	}
+	return total;
 }
 
 Horizontal::Horizontal(std::vector<std::unique_ptr<Shape>> shapes) :_shapes(std::move(shapes))
@@ -163,6 +182,8 @@ std::string Horizontal::toPostScript() const
 {
 	std::ostringstream os;
 
+	os << "gsave \n";
+	os << -width() / 2 << " 0  rmoveto \n";  //center the horizontal shape 
 	for (int i = 0; i < _shapes.size(); ++i)
 	{
 		os << _shapes[i]->toPostScript();
@@ -170,19 +191,32 @@ std::string Horizontal::toPostScript() const
 		if (i != _shapes.size() - 1)
 			os << (_shapes[i]->width() / 2) + (_shapes[i + 1]->width() / 2) << " 0 rmoveto \n";
 	}
+	os << "grestore \n";
 
 	return os.str();
 }
 
 double Horizontal::width() const
 {
-	return _shapes.back()->height();
+	double total = 0;
+	for (auto &shape : _shapes)
+	{
+		total += shape->width();
+	}
+	return total;
 }
 
 double Horizontal::height() const
 {
+	//horizontal width = width of the widest shape in vector
+	double result = 0;
+	for (auto & shape : _shapes)
+	{
+		if (result < shape->height())
+			result = shape->height();
+	}
 
-	return _shapes.back()->height();
+	return result;
 }
 
 
