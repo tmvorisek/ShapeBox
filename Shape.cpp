@@ -82,7 +82,7 @@ Circle::Circle(double radius) : _radius(radius)
 std::string Circle::toPostScript() const
 {
 	std::ostringstream os;
-	 
+
 	os << "gsave \n" //compound shapes break if you dont have gsave and restore
 		<< " currentpoint " << _radius << " 0 360 arc stroke \n"
 		<< "grestore \n";
@@ -103,14 +103,14 @@ double Circle::height() const
 ////////////////////////
 //Polygon definitions
 ////////////////////////
-Polygon::Polygon(unsigned int sides, double sideLength) 
+Polygon::Polygon(unsigned int sides, double sideLength)
 	: _sides(sides), _sideLength(sideLength)
 {}
 
 std::string Polygon::toPostScript() const
 {
 	std::ostringstream os;
-	
+
 
 	return os.str();
 }
@@ -137,12 +137,12 @@ std::string Vertical::toPostScript() const
 	std::ostringstream os;
 
 	os << "gsave \n";
-	os << " 0 " << -height()/2 << " rmoveto \n"; //center object
+	os << " 0 " << -height() / 2 << " rmoveto \n"; //center object
 	for (int i = 0; i < _shapes.size(); ++i)
 	{
 		os << _shapes[i]->toPostScript();
 
-		if(i != _shapes.size() - 1)
+		if (i != _shapes.size() - 1)
 			os << " 0 " << (_shapes[i]->height() / 2) + (_shapes[i + 1]->height() / 2) << " rmoveto \n";
 	}
 	os << "grestore \n";
@@ -233,23 +233,26 @@ Scale::Scale(std::unique_ptr<Shape> shape, double fx, double fy) : _shape(std::m
 // 	return os.str();
 // }
 
-Rotate::Rotate(std::unique_ptr<Shape> shape, int angle): _shape(std::move(shape)), _angle(angle)
+Rotate::Rotate(std::unique_ptr<Shape> shape, int angle) : _shape(std::move(shape)), _angle(angle)
 {
 	if (angle != 90 && angle != 180 && angle != 270)
 		_angle = 0;
-} 
+}
 
 int Rotate::angle() const {
 	return _angle;
 }
 
 std::string Rotate::toPostScript() const
-{	
+{
 	std::ostringstream os;
-	 os << "gsave \n" 
-		<< "rotate " << angle() << "\n"
-		<< _shape->toPostScript() 
+	os << "gsave \n"
+		<< -_width / 2 << " " << -_height / 2 << " rmoveto \n"  //move to origin
+		<< angle() << " rotate \n"
+		<< _shape->toPostScript()
 		<< "grestore";
+
+	return os.str();
 }
 
 double Rotate::width() const {
