@@ -241,8 +241,19 @@ Translation::Translation(std::unique_ptr<Shape> shape, double dx, double dy)
 std::string Translation::toPostScript() const
 {
 	std::ostringstream os;
+
 	os << "gsave\n" << _dx << " " << _dy << " translate\n";
 	os << _shape->toPostScript() << "grestore\n";
 
 	return os.str();
+}
+
+double Translation::width() const
+{
+	return _shape->width();
+}
+
+double Translation::height() const
+{
+	return _shape->height();
 }
