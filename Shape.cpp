@@ -100,6 +100,30 @@ double Circle::height() const
 	return 2 * _radius;
 }
 
+////////////////////////
+//Polygon definitions
+////////////////////////
+Polygon::Polygon(unsigned int sides, double sideLength) 
+	: _sides(sides), _sideLength(sideLength)
+{}
+
+std::string Polygon::toPostScript() const
+{
+	std::ostringstream os;
+	
+
+	return os.str();
+}
+
+double Polygon::width() const
+{
+	return 0;
+}
+
+double Polygon::height() const
+{
+	return 0;
+}
 
 ////////////////////////
 //Vertical definitions
@@ -174,3 +198,17 @@ Scale::Scale(std::unique_ptr<Shape> shape, double fx, double fy) : _shape(std::m
 
 // 	return os.str();
 // }
+
+
+Translation::Translation(std::unique_ptr<Shape> shape, double dx, double dy)
+	: _shape(std::move(shape)), _dx(dx), _dy(dy)
+{}
+
+std::string Translation::toPostScript() const
+{
+	std::ostringstream os;
+	os << "gsave\n" << _dx << " " << _dy << " translate\n";
+	os << _shape->toPostScript() << "grestore\n";
+
+	return os.str();
+}
