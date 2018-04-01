@@ -41,7 +41,7 @@ TEST_CASE( "Rectangle Tests", "[multi-file:1]" ) {
 TEST_CASE ( "toPostscript tests") {
   //std::vector<std::string> testShapes;
   //testShapes.emplace_back(Circle(1).toPostScript());
-  REQUIRE (Circle(1).toPostScript() == " currentpoint 1 0 360 arc stroke \n");
+  REQUIRE (Circle(1).toPostScript() == "gsave \n currentpoint 1 0 360 arc stroke \ngrestore \n");
 }
 
 TEST_CASE ( "Vertical shape of 2 shapes height and width") {
@@ -51,4 +51,15 @@ TEST_CASE ( "Vertical shape of 2 shapes height and width") {
   std::unique_ptr<Shape> vertical = std::make_unique<Vertical>(std::move(shapes));
   
   REQUIRE (vertical->height() == 12.0);
+}
+
+TEST_CASE ("Rotate Constructor") {
+  std::unique_ptr<Rotate> rotatedCircle = std::make_unique<Rotate>(std::make_unique<Circle>(1), 90);
+  REQUIRE (rotatedCircle->angle() == 90);
+  std::unique_ptr<Rotate> rotatedCircle2 = std::make_unique<Rotate>(std::make_unique<Circle>(1), 270); 
+  REQUIRE (rotatedCircle2->angle() == 270);
+  std::unique_ptr<Rotate> rotatedCircle3 = std::make_unique<Rotate>(std::make_unique<Circle>(1), -100); 
+  REQUIRE (rotatedCircle3->angle() == 0);
+  std::unique_ptr<Rotate> rotatedCircle4 = std::make_unique<Rotate>(std::make_unique<Circle>(1), 100000); 
+  REQUIRE (rotatedCircle4->angle() == 0);
 }

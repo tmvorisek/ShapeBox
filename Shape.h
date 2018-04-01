@@ -93,3 +93,19 @@ private:
 	std::unique_ptr<Shape> _shape;
 	double _fx, _fy;
 };
+
+//if angle != 90, 180 or 270 we default to 0
+class Rotate : public Shape
+{
+public:
+	Rotate(std::unique_ptr<Shape> shape, int angle);
+	virtual double width() const override;
+	virtual double height() const override;
+	virtual std::string toPostScript() const override;
+	int angle() const;
+
+private:
+	std::unique_ptr<Shape> _shape;
+	double _width, _height;
+	int _angle;
+};

@@ -208,3 +208,38 @@ Scale::Scale(std::unique_ptr<Shape> shape, double fx, double fy) : _shape(std::m
 
 // 	return os.str();
 // }
+
+Rotate::Rotate(std::unique_ptr<Shape> shape, int angle): _shape(std::move(shape)), _angle(angle)
+{
+	if (angle != 90 && angle != 180 && angle != 270)
+		_angle = 0;
+} 
+
+int Rotate::angle() const {
+	return _angle;
+}
+
+std::string Rotate::toPostScript() const
+{	
+	std::ostringstream os;
+	 os << "gsave \n" 
+		<< "rotate " << angle() << "\n"
+		<< _shape->toPostScript() 
+		<< "grestore";
+
+	return os.str();
+}
+
+double Rotate::width() const {
+	if (angle() == 90 || angle() == 270)
+		return _shape->height();
+	else
+		return _shape->width();
+}
+
+double Rotate::height() const {
+	if (angle() == 90 || angle() == 270)
+		return _shape->width();
+	else
+		return _shape->height();
+}
