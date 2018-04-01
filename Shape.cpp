@@ -220,18 +220,31 @@ double Horizontal::height() const
 }
 
 
-Scale::Scale(std::unique_ptr<Shape> shape, double fx, double fy) : _shape(std::move(shape)), _fx(fx), _fy(fy)
+Scale::Scale(std::unique_ptr<Shape> shape, double scaleX, double scaleY) : _shape(std::move(shape)), _scaleX(scaleX), _scaleY(scaleY)
 {}
 
-// std::string Scale::toPostScript()
-// {
-// 	std::ostringstream os;
+std::string Scale::toPostScript() const 
+{	
+	std::ostringstream os;
 
-// 	os << _fx << " " << _fy << " scale \n";
-// 	_shape->toPostScript();
+	 os << "gsave \n"
+		<< _scaleX << " " << _scaleY << " scale \n"
+		<< -width() / 2.0 << " " << -height() / 2.0 << " rmoveto \n"  //move to origin
+		<< _shape->toPostScript() << " \n"
+		<< "grestore \n";
 
-// 	return os.str();
-// }
+	return os.str();
+}
+
+double Scale::width() const
+{
+	return _shape->width() * _scaleX;
+}
+
+double Scale::height() const
+{
+	return _shape->height() * _scaleY;
+}
 
 Rotate::Rotate(std::unique_ptr<Shape> shape, int angle) : _shape(std::move(shape)), _angle(angle)
 {
@@ -250,7 +263,7 @@ std::string Rotate::toPostScript() const
 		<< -_width / 2 << " " << -_height / 2 << " rmoveto \n"  //move to origin
 		<< angle() << " rotate \n"
 		<< _shape->toPostScript()
-		<< "grestore";
+		<< "grestore \n";
 
 	return os.str();
 }
