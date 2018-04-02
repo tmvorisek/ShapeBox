@@ -46,14 +46,14 @@ std::string Rectangle::toPostScript() const
 	std::ostringstream os;
 
 	os
-		<< "gsave \n"
+		<< "gsave %<rectangle>\n"
 		<< -_width / 2 << " " << -_height / 2 << " rmoveto \n"  //move to origin
 		<< _width << " 0 rlineto \n" //bottom
 		<< " 0 " << _height << " rlineto \n" //right
 		<< -_width << " 0 rlineto \n" //top
 		<< " 0 " << -_height << " rlineto \n"  //left 
 		<< "  stroke \n"
-		<< "grestore \n";
+		<< "grestore  %</rectangle>\n";
 
 	return os.str();
 }
@@ -83,9 +83,9 @@ std::string Circle::toPostScript() const
 {
 	std::ostringstream os;
 
-	os << "gsave \n" //compound shapes break if you dont have gsave and restore
+	os << "gsave %<circle> \n" //compound shapes break if you dont have gsave and restore
 		<< " currentpoint " << _radius << " 0 360 arc stroke \n"
-		<< "grestore \n";
+		<< "grestore %</circle> \n";
 
 	return os.str();
 }
@@ -136,7 +136,7 @@ std::string Vertical::toPostScript() const
 {
 	std::ostringstream os;
 
-	os << "gsave \n";
+	os << "gsave %<vertical>\n";
 	os << " 0 " << -height() / 2 << " rmoveto \n"; //center object
 	for (int i = 0; i < _shapes.size(); ++i)
 	{
@@ -145,7 +145,7 @@ std::string Vertical::toPostScript() const
 		if (i != _shapes.size() - 1)
 			os << " 0 " << (_shapes[i]->height() / 2) + (_shapes[i + 1]->height() / 2) << " rmoveto \n";
 	}
-	os << "grestore \n";
+	os << "grestore %</vertical> \n";
 
 
 	return os.str();
@@ -182,7 +182,7 @@ std::string Horizontal::toPostScript() const
 {
 	std::ostringstream os;
 
-	os << "gsave \n";
+	os << "gsave %<horizontal> \n";
 	os << -width() / 2 << " 0  rmoveto \n";  //center the horizontal shape 
 	for (int i = 0; i < _shapes.size(); ++i)
 	{
@@ -191,7 +191,7 @@ std::string Horizontal::toPostScript() const
 		if (i != _shapes.size() - 1)
 			os << (_shapes[i]->width() / 2) + (_shapes[i + 1]->width() / 2) << " 0 rmoveto \n";
 	}
-	os << "grestore \n";
+	os << "grestore %</horizontal> \n";
 
 	return os.str();
 }
@@ -227,11 +227,11 @@ std::string Scale::toPostScript() const
 {	
 	std::ostringstream os;
 
-	 os << "gsave \n"
+	 os << "gsave %<scale> \n"
 		<< _scaleX << " " << _scaleY << " scale \n"
 		<< -width() / 2.0 << " " << -height() / 2.0 << " rmoveto \n"  //move to origin
 		<< _shape->toPostScript() << " \n"
-		<< "grestore \n";
+		<< "grestore %</scale> \n";
 
 	return os.str();
 }
@@ -259,11 +259,11 @@ int Rotate::angle() const {
 std::string Rotate::toPostScript() const
 {
 	std::ostringstream os;
-	os << "gsave \n"
+	os << "gsave %<rotate> \n"
 		<< -_width / 2 << " " << -_height / 2 << " rmoveto \n"  //move to origin
 		<< angle() << " rotate \n"
 		<< _shape->toPostScript()
-		<< "grestore \n";
+		<< "grestore %</rotate> \n";
 
 	return os.str();
 }
