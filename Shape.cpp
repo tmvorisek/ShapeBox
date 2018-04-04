@@ -126,6 +126,7 @@ std::string Polygon::toPostScript() const
 	std::ostringstream os;
 	os << "gsave % <polygon>" << std::endl;
 	os << "newpath" << std::endl;
+	os << "90 rotate" << std::endl;
 	os << _sides << " 4 dict begin" << std::endl;
 	os << "/N exch def" << std::endl;
 	os << "/A 360 N div def" << std::endl;
