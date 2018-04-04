@@ -129,7 +129,7 @@ std::string Polygon::toPostScript() const
 	os << _sides << " 4 dict begin" << std::endl;
 	os << "/N exch def" << std::endl;
 	os << "/A 360 N div def" << std::endl;
-  os << a << " 0 moveto" << std::endl;
+	os << a << " 0 moveto" << std::endl;
 	os << "N {" << std::endl;
 	os << a << " A cos mul " << a << "A sin mul lineto" << std::endl;
 	os << "/A A 360 N div add def" << std::endl;
