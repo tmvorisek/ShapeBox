@@ -1,5 +1,10 @@
+#define _USE_MATH_DEFINES
+
 #include "Shape.h"
 #include <sstream>
+#include <math.h>
+#include <stdexcept>
+
 
 Shape::~Shape() = default;
 
@@ -105,11 +110,20 @@ double Circle::height() const
 ////////////////////////
 Polygon::Polygon(unsigned int sides, double sideLength)
 	: _sides(sides), _sideLength(sideLength)
-{}
+{
+	if (_sides<3)
+	{
+		throw std::invalid_argument( "Polygons must have 3 or more sides" );
+	}
+}
 
 std::string Polygon::toPostScript() const
 {
+	const double o = _sideLength/2, theta = 360/_sides;
+	const double a = o/std::tan(theta/2);
+	const double h = std::atan(o/a)*180/M_PI;
 	std::ostringstream os;
+	os << "gsave % <polygon>\n";
 
 
 	return os.str();
