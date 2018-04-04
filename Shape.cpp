@@ -121,10 +121,23 @@ std::string Polygon::toPostScript() const
 {
 	const double o = _sideLength/2, theta = 360/_sides;
 	const double a = o/std::tan(theta/2);
-	const double h = std::atan(o/a)*180/M_PI;
-	std::ostringstream os;
-	os << "gsave % <polygon>\n";
+	// const double h = std::atan(o/a)*180/M_PI;
 
+	std::ostringstream os;
+	os << "gsave % <polygon>" << std::endl;
+	os << "newpath" << std::endl;
+	os << _sides << " 4 dict begin" << std::endl;
+	os << "/N exch def" << std::endl;
+	os << "/A 360 N div def" << std::endl;
+  os << a << " 0 moveto" << std::endl;
+	os << "N {" << std::endl;
+	os << a << " A cos mul " << a << "A sin mul lineto" << std::endl;
+	os << "/A A 360 N div add def" << std::endl;
+	os << "} repeat" << std::endl;
+	os << "closepath" << std::endl;
+	os << "end" << std::endl;
+	os << "stroke" << std::endl;
+	os << "grestore" << std::endl;
 
 	return os.str();
 }
