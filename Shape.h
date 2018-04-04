@@ -108,12 +108,12 @@ private:
 class Translation : public Shape
 {
 public:
-	Translation(std::unique_ptr<Shape> shape, double fx, double fy);
+	Translation(std::unique_ptr<Shape> shape, double dx, double dy);
 	virtual std::string toPostScript() const override;
 	virtual double width() const override;
 	virtual double height() const override;
 private:
-	std::unique_ptr<Shape> _shape;
+	const std::unique_ptr<Shape> _shape;
 	const double _dx, _dy;
 };
 
