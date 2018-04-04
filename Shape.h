@@ -40,7 +40,7 @@ private:
 	double _width, _height;
 };
 
-class Square: public Rectangle
+class Square : public Rectangle
 {
 public:
 	Square(double length);
@@ -98,11 +98,29 @@ private:
 class Scale : public Shape
 {
 public:
-	Scale(std::unique_ptr<Shape> shape, double fx, double fy);
-	//virtual std::string toPostScript() override;
+	Scale(std::unique_ptr<Shape> shape, double scaleX, double scaleY);
+	virtual std::string toPostScript() const override;
+	virtual double width() const override;
+	virtual double height() const override;
 private:
 	std::unique_ptr<Shape> _shape;
-	double _fx, _fy;
+	double _width, _height, _scaleX, _scaleY;
+};
+
+//if angle != 90, 180 or 270 we default to 0
+class Rotate : public Shape
+{
+public:
+	Rotate(std::unique_ptr<Shape> shape, int angle);
+	virtual double width() const override;
+	virtual double height() const override;
+	virtual std::string toPostScript() const override;
+	int angle() const;
+
+private:
+	std::unique_ptr<Shape> _shape;
+	double _width, _height;
+	int _angle;
 };
 
 class Translation : public Shape
@@ -116,4 +134,3 @@ private:
 	const std::unique_ptr<Shape> _shape;
 	const double _dx, _dy;
 };
-

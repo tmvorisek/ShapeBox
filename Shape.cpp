@@ -46,14 +46,14 @@ std::string Rectangle::toPostScript() const
 	std::ostringstream os;
 
 	os
-		<< "gsave \n"
+		<< "gsave %<rectangle>\n"
 		<< -_width / 2 << " " << -_height / 2 << " rmoveto \n"  //move to origin
 		<< _width << " 0 rlineto \n" //bottom
 		<< " 0 " << _height << " rlineto \n" //right
 		<< -_width << " 0 rlineto \n" //top
 		<< " 0 " << -_height << " rlineto \n"  //left 
 		<< "  stroke \n"
-		<< "grestore \n";
+		<< "grestore  %</rectangle>\n";
 
 	return os.str();
 }
@@ -82,10 +82,10 @@ Circle::Circle(double radius) : _radius(radius)
 std::string Circle::toPostScript() const
 {
 	std::ostringstream os;
-	 
-	os << "gsave \n" //compound shapes break if you dont have gsave and restore
-		<< " currentpoint " << _radius << " 0 360 arc stroke \n"
-		<< "grestore \n";
+
+	os << "gsave %<circle> \n" //compound shapes break if you dont have gsave and restore
+		<< "currentpoint " << _radius << " 0 360 arc stroke \n"
+		<< "grestore %</circle> \n";
 
 	return os.str();
 }
@@ -103,14 +103,14 @@ double Circle::height() const
 ////////////////////////
 //Polygon definitions
 ////////////////////////
-Polygon::Polygon(unsigned int sides, double sideLength) 
+Polygon::Polygon(unsigned int sides, double sideLength)
 	: _sides(sides), _sideLength(sideLength)
 {}
 
 std::string Polygon::toPostScript() const
 {
 	std::ostringstream os;
-	
+
 
 	return os.str();
 }
@@ -130,22 +130,30 @@ double Polygon::height() const
 ////////////////////////
 
 Vertical::Vertical(std::vector<std::unique_ptr<Shape>> shapes) :_shapes(std::move(shapes))
-{}
+{
+	for (auto & shape : _shapes)
+	{
+		_height += shape->height();
+
+		if (_width < shape->width())
+			_width = shape->width();
+	}
+}
 
 std::string Vertical::toPostScript() const
 {
 	std::ostringstream os;
 
-	os << "gsave \n";
-	os << " 0 " << -height()/2 << " rmoveto \n"; //center object
+	os << "gsave %<vertical>\n";
+	os << " 0 " << -height() / 2 << " rmoveto \n"; //center object
 	for (int i = 0; i < _shapes.size(); ++i)
 	{
 		os << _shapes[i]->toPostScript();
 
-		if(i != _shapes.size() - 1)
+		if (i != _shapes.size() - 1)
 			os << " 0 " << (_shapes[i]->height() / 2) + (_shapes[i + 1]->height() / 2) << " rmoveto \n";
 	}
-	os << "grestore \n";
+	os << "grestore %</vertical> \n";
 
 
 	return os.str();
@@ -153,36 +161,30 @@ std::string Vertical::toPostScript() const
 
 double Vertical::width() const
 {
-	//width for vertical shape = width of the widest shape
-	double result = 0;
-
-	for (auto & shape : _shapes)
-	{
-		if (result < shape->width())
-			result = shape->width();
-	}
-
-	return result;
+	return _width;
 }
 
 double Vertical::height() const
 {
-	double total = 0;
-	for (auto &shape : _shapes)
-	{
-		total += shape->height();
-	}
-	return total;
+	return _height;
 }
 
 Horizontal::Horizontal(std::vector<std::unique_ptr<Shape>> shapes) :_shapes(std::move(shapes))
-{}
+{
+	for (auto &shape : _shapes)
+	{
+		_width += shape->width();
+
+		if (_height < shape->height())
+			_height = shape->height();
+	}
+}
 
 std::string Horizontal::toPostScript() const
 {
 	std::ostringstream os;
 
-	os << "gsave \n";
+	os << "gsave %<horizontal> \n";
 	os << -width() / 2 << " 0  rmoveto \n";  //center the horizontal shape 
 	for (int i = 0; i < _shapes.size(); ++i)
 	{
@@ -191,48 +193,90 @@ std::string Horizontal::toPostScript() const
 		if (i != _shapes.size() - 1)
 			os << (_shapes[i]->width() / 2) + (_shapes[i + 1]->width() / 2) << " 0 rmoveto \n";
 	}
-	os << "grestore \n";
+	os << "grestore %</horizontal> \n";
 
 	return os.str();
 }
 
 double Horizontal::width() const
 {
-	double total = 0;
-	for (auto &shape : _shapes)
-	{
-		total += shape->width();
-	}
-	return total;
+	return _width;
 }
 
 double Horizontal::height() const
 {
-	//horizontal width = width of the widest shape in vector
-	double result = 0;
-	for (auto & shape : _shapes)
-	{
-		if (result < shape->height())
-			result = shape->height();
-	}
-
-	return result;
+	return _height;
 }
 
 
-Scale::Scale(std::unique_ptr<Shape> shape, double fx, double fy) : _shape(std::move(shape)), _fx(fx), _fy(fy)
-{}
+Scale::Scale(std::unique_ptr<Shape> shape, double scaleX, double scaleY) : _shape(std::move(shape)), _scaleX(scaleX), _scaleY(scaleY)
+{
+	_width = _shape->width() * scaleX;
+	_height = _shape->height() * scaleY;
+}
 
-// std::string Scale::toPostScript()
-// {
-// 	std::ostringstream os;
+std::string Scale::toPostScript() const 
+{	
+	std::ostringstream os;
 
-// 	os << _fx << " " << _fy << " scale \n";
-// 	_shape->toPostScript();
+	 os << "gsave %<scale> \n"
+		<< _scaleX << " " << _scaleY << " scale \n"
+		<< _shape->toPostScript() << " \n"
+		<< "grestore %</scale> \n";
 
-// 	return os.str();
-// }
+	return os.str();
+}
 
+double Scale::width() const
+{
+	return _width;
+}
+
+double Scale::height() const
+{
+	return _height;
+}
+
+Rotate::Rotate(std::unique_ptr<Shape> shape, int angle) : _shape(std::move(shape)), _angle(angle)
+{
+	_width = _shape->width();
+	_height = _shape->height();
+
+	if (angle != 90 && angle != 180 && angle != 270)
+		_angle = 0;
+
+	if (_angle == 90 || _angle == 270)
+	{
+		_width = _shape->height();
+		_height = _shape->width();
+	}
+}
+
+int Rotate::angle() const {
+	return _angle;
+}
+
+std::string Rotate::toPostScript() const
+{
+	std::ostringstream os;
+	os << "gsave %<rotate> \n"
+		<< angle() << " rotate \n"
+		//<< -width() / 2 << "  " << -height() / 2 << " rmoveto \n"  //move to origin
+		<< _shape->toPostScript()
+		<< "grestore %</rotate> \n";
+
+	return os.str();
+}
+
+double Rotate::width() const 
+{
+	return _width;
+}
+
+double Rotate::height() const 
+{
+	return _height;
+}
 
 Translation::Translation(std::unique_ptr<Shape> shape, double dx, double dy)
 	: _shape(std::move(shape)), _dx(dx), _dy(dy)
