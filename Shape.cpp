@@ -145,12 +145,28 @@ std::string Polygon::toPostScript() const
 
 double Polygon::width() const
 {
-	return 0;
+	double n = 0;
+	if (_sides%2!=0) { //_sides is odd
+		n = _sideLength*std::sin(M_PI*(_sides-1)/(2 * _sides))/std::sin(M_PI/_sides);
+	} else if (_sides%4==0) { //4 divides _sides
+		n = (_sideLength * std::cos(M_PI/_sides))/(std::sin(M_PI/_sides));
+	} else if (_sides%2==0) { //2 divides _sides but 4 does not
+		n = _sideLength/(std::sin(M_PI/_sides));
+	}
+	return n;
 }
 
 double Polygon::height() const
 {
-	return 0;
+	double n = 0;
+	if (_sides%2!=0) { //_sides is odd
+		n = _sideLength * (1+std::cos(M_PI/_sides))/(2*std::sin(M_PI/_sides));
+	} else if (_sides%4==0) { //4 divides _sides
+		n = _sideLength * (std::cos(M_PI/_sides))/(std::sin(M_PI/_sides));
+	} else if (_sides%2==0) { //2 divides _sides but 4 does not
+		n = _sideLength * (std::cos(M_PI/_sides))/(std::sin(M_PI/_sides))	;
+	}
+	return n;
 }
 
 ////////////////////////
