@@ -1,12 +1,20 @@
 
 #define CATCH_CONFIG_MAIN
 
-#include <vector>
-#include <memory>
+// #include <vector>
+// #include <memory>
 #include "catch.hpp"
-#include "Shape.h"
+#include "shapes/Shape.h"
+#include "shapes/Rectangle.h"
+#include <iostream>
 
+TEST_CASE( "Rectangle", "[Rectangle]" ) {
+  REQUIRE (Rectangle(2,4).height() == 4);
+  REQUIRE (Rectangle(2,4).width() == 2);
+  REQUIRE (Rectangle(-2,-4).width() == 2);
+}
 
+/*
 TEST_CASE( "Circle height and width", "[multi-file:1]" ) {
   REQUIRE (Circle(1).height() == 2);
   REQUIRE (Circle(1).width() == 2);
@@ -38,6 +46,10 @@ TEST_CASE( "Rectangle Tests", "[multi-file:1]" ) {
   REQUIRE (Rectangle(-1,-1).height() == -1);
 }
 
+TEST_CASE( "Polygon", "[Polygon]") {
+  REQUIRE (Polygon(3,))
+}
+
 TEST_CASE ( "toPostscript tests") {
   //std::vector<std::string> testShapes;
   //testShapes.emplace_back(Circle(1).toPostScript());
@@ -63,3 +75,4 @@ TEST_CASE ("Rotate Constructor") {
   std::unique_ptr<Rotate> rotatedCircle4 = std::make_unique<Rotate>(std::make_unique<Circle>(1), 100000); 
   REQUIRE (rotatedCircle4->angle() == 0);
 }
+*/
