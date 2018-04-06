@@ -29,7 +29,7 @@ void write_ps_file(std::string fname, std::unique_ptr<Shape> shape)
 {
   std::ofstream ofs;
   std::unique_ptr<Translate> tptr = 
-    std::make_unique<Translate>(72, 72, std::move(shape));
+    std::make_unique<Translate>(72*3, 72*3, std::move(shape));
   Page pg(std::move(tptr));
 
   ofs.open("testPS/"+fname+".ps", std::ofstream::out | std::ofstream::trunc);
@@ -102,7 +102,7 @@ TEST_CASE( "Horizontal", "[Horizontal]" ) {
     vec.push_back(std::move(std::make_unique<Polygon>(i+3,72/4)));
   }
   Horizontal horz(vec);
-  // Vertical vert({ std::make_unique<Circle>(72) });
+  
   REQUIRE (int(horz.width()) == 425);
   REQUIRE (int(horz.height()) == 67);
 

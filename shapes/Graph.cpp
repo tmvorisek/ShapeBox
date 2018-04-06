@@ -13,7 +13,6 @@ std::string Graph::toPostScript() const
   << "gsave" << std::endl
   << "1 setlinewidth" << std::endl
   << "0 0 0 setrgbcolor" << std::endl
-  << "300 300 translate" << std::endl
   << "/h 0 def" << std::endl
   << "1 1 " << _nodes << " {" << std::endl
   << "72 mul" << std::endl
