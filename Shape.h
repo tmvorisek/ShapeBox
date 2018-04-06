@@ -65,7 +65,7 @@ public:
 	virtual double width() const override;
 	virtual double height() const override;
 private:
-	const unsigned int _sides;
+	const unsigned short _sides;
 	const double _sideLength;
 };
 ////////////////////////
