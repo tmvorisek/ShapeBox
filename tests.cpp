@@ -22,13 +22,14 @@
 #include "shapes/Layered.h"
 #include "shapes/Translate.h"
 #include "shapes/Page.h"
+#include "shapes/Graph.h"
 
 // Calls toPostScript on shape and writes it to "testPS/<fname>.ps" for viewing.
 void write_ps_file(std::string fname, std::unique_ptr<Shape> shape)
 {
   std::ofstream ofs;
   std::unique_ptr<Translate> tptr = 
-    std::make_unique<Translate>(72*3, 72*3, std::move(shape));
+    std::make_unique<Translate>(72, 72, std::move(shape));
   Page pg(std::move(tptr));
 
   ofs.open("testPS/"+fname+".ps", std::ofstream::out | std::ofstream::trunc);
@@ -144,4 +145,11 @@ TEST_CASE( "Layered", "[Layered]" ) {
     vec2.push_back(std::move(std::make_unique<Polygon>(i+3, 72/4)));
   }
   write_ps_file("layered", std::make_unique<Layered>(vec2));
+}
+
+TEST_CASE( "Graph", "[Graph]" ) {
+  REQUIRE(Graph(10).width() == 200);
+  REQUIRE(Graph(10).height() == 1000);
+
+  write_ps_file("graph", std::make_unique<Graph>(5));
 }
