@@ -23,7 +23,7 @@ std::string Polygon::toPostScript() const
   << "gsave % <polygon>" << std::endl
   << "newpath" << std::endl
   << "90 rotate" << std::endl
-  << "0 " << -((height()/2)-a) << " translate" << std::endl
+  // << "0 " << -((height()/2)-a) << " translate" << std::endl
   << _sides << " 4 dict begin" << std::endl
   << "/N exch def" << std::endl
   << "/A 360 N div def" << std::endl
