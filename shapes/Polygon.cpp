@@ -1,5 +1,6 @@
 #include "Polygon.h"
 #include <math.h>
+#include <cmath>
 #include <sstream>
 
 #define _USE_MATH_DEFINES
