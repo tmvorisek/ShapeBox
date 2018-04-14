@@ -1,27 +1,28 @@
 #include "Polygon.h"
-#include <math.h>
-#include <cmath>
+//#include <math.h>
+//#include <cmath>
 #include <sstream>
 
-#define _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
+#define M_PI atan(1)*4
 
-Polygon::Polygon(unsigned short sides, double sideLength)
+Poly::Poly(unsigned short sides, double sideLength)
   : _sides(std::abs(sides)), _sideLength(std::abs(sideLength))
 {
   if (_sides<3)
   {
-    throw std::invalid_argument( "Polygons must have 3 or more sides" );
+    throw std::invalid_argument( "Polys must have 3 or more sides" );
   }
 }
 
-std::string Polygon::toPostScript() const
+std::string Poly::toPostScript() const
 {
   const double o = _sideLength/2, theta = 360/_sides*M_PI/180;
   const double a = o/std::tan(theta/2);
   std::ostringstream os;
 
   os 
-  << "gsave % <polygon>" << std::endl
+  << "gsave % <Poly>" << std::endl
   << "newpath" << std::endl
   << "90 rotate" << std::endl
   // << "0 " << -((height()/2)-a) << " translate" << std::endl
@@ -41,7 +42,7 @@ std::string Polygon::toPostScript() const
   return os.str();
 }
 
-double Polygon::width() const
+double Poly::width() const
 {
   double n = 0;
   if (_sides%2!=0) { //_sides is odd
@@ -55,7 +56,7 @@ double Polygon::width() const
   return n;
 }
 
-double Polygon::height() const
+double Poly::height() const
 {
   double n = 0;
   if (_sides%2!=0) { //_sides is odd

@@ -2,7 +2,7 @@
 
 #include "Rectangle.h"
 
-class Spacer : public Rectangle
+class Spacer : public Rect
 {
 public:
   Spacer(double, double);

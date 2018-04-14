@@ -2,7 +2,7 @@
 
 #include "Rectangle.h"
 
-class Square : public Rectangle
+class Square : public Rect
 {
 public:
   Square(double length);

@@ -1,17 +1,17 @@
 #include "Rectangle.h"
 #include <sstream>
-#include <cmath>
+//#include <cmath>
 
-Rectangle::Rectangle(double width, double height) 
+Rect::Rect(double width, double height) 
   : _width(std::abs(width)), _height(std::abs(height))
 {}
 
-std::string Rectangle::toPostScript() const
+std::string Rect::toPostScript() const
 {
   std::ostringstream os;
 
   os
-  << "gsave %<rectangle>\n"
+  << "gsave %<Rect>\n"
   << "newpath\n  "
   << -_width / 2 << " " << -_height / 2 << " moveto\n  "  //move to origin
   << _width << " 0 rlineto \n  " //bottom
@@ -19,17 +19,17 @@ std::string Rectangle::toPostScript() const
   << -_width << " 0 rlineto \n" //top
   << "closepath\n"
   << "stroke \n"
-  << "grestore  %</rectangle>\n";
+  << "grestore  %</Rect>\n";
 
   return os.str();
 }
 
-double Rectangle::width() const
+double Rect::width() const
 {
   return _width;
 }
 
-double Rectangle::height() const
+double Rect::height() const
 {
   return _height;
 }

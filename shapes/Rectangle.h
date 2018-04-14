@@ -2,10 +2,10 @@
 
 #include "Shape.h"
 
-class Rectangle : public Shape
+class Rect : public Shape
 {
 public:
-  Rectangle(double, double);
+  Rect(double width, double height);
   virtual std::string toPostScript() const override;
   virtual double width() const override;
   virtual double height() const override;

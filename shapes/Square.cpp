@@ -1,3 +1,3 @@
 #include "Square.h"
 
-Square::Square(double length) :Rectangle(length, length) {}
+Square::Square(double length) :Rect(length, length) {}

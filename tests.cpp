@@ -37,12 +37,12 @@ void write_ps_file(std::string fname, std::unique_ptr<Shape> shape)
   ofs.close();
 }
 
-TEST_CASE( "Rectangle", "[Rectangle]" ) {
-  REQUIRE (Rectangle(2,4).height() == 4);
-  REQUIRE (Rectangle(2,4).width() == 2);
-  REQUIRE (Rectangle(-2,-4).width() == 2);
+TEST_CASE( "Rect", "[Rect]" ) {
+  REQUIRE (Rect(2,4).height() == 4);
+  REQUIRE (Rect(2,4).width() == 2);
+  REQUIRE (Rect(-2,-4).width() == 2);
 
-  write_ps_file("rectangle", std::make_unique<Rectangle>(72,144));
+  write_ps_file("Rect", std::make_unique<Rect>(72,144));
 }
 
 TEST_CASE( "Spacer", "[Spacer]" ) {
@@ -64,11 +64,11 @@ TEST_CASE( "Circle", "[Circle]" ) {
   write_ps_file("circle", std::make_unique<Circle>(72));
 } 
 
-TEST_CASE( "Polygon", "[Polygon]" ) {
-  REQUIRE (int(Polygon(4, 72).width()) == 72);
-  REQUIRE (int(Polygon(4, 72).height()) == 72);
-  REQUIRE_THROWS (Polygon(2, 72));
-  write_ps_file("polygon", std::make_unique<Polygon>(7,72));
+TEST_CASE( "Poly", "[Poly]" ) {
+  REQUIRE (int(Poly(4, 72).width()) == 72);
+  REQUIRE (int(Poly(4, 72).height()) == 72);
+  REQUIRE_THROWS (Poly(2, 72));
+  write_ps_file("Poly", std::make_unique<Poly>(7,72));
 }
 
 TEST_CASE( "Triangle", "[Triangle]" ) {
@@ -99,7 +99,7 @@ TEST_CASE( "Horizontal", "[Horizontal]" ) {
   std::vector<std::unique_ptr<Shape>> vec, vec2;
   for (int i = 0; i < 10; i++)
   {
-    vec.push_back(std::move(std::make_unique<Polygon>(i+3,72/4)));
+    vec.push_back(std::move(std::make_unique<Poly>(i+3,72/4)));
   }
   Horizontal horz(vec);
   
@@ -108,7 +108,7 @@ TEST_CASE( "Horizontal", "[Horizontal]" ) {
 
   for (int i = 0; i < 10; i++)
   {
-    vec2.push_back(std::move(std::make_unique<Polygon>(i+3,72/4)));
+    vec2.push_back(std::move(std::make_unique<Poly>(i+3,72/4)));
   }
   write_ps_file("horizontal", std::make_unique<Horizontal>(vec2));
 } 
@@ -116,19 +116,19 @@ TEST_CASE( "Horizontal", "[Horizontal]" ) {
 TEST_CASE( "Scale", "[Scale]" ) {
   Scale sc(std::make_unique<Circle>(72), 2, 2);
   REQUIRE (sc.width() == 72*4);
-  Scale sp(std::make_unique<Polygon>(5,72), 2, 4);
+  Scale sp(std::make_unique<Poly>(5,72), 2, 4);
   REQUIRE (int(sp.width()) == 232);
   write_ps_file("scale", 
     std::make_unique<Scale>(std::make_unique<Circle>(72), 2, 2));
 }
 
 TEST_CASE( "Rotate", "[Rotate]" ) {
-  Rotate rr(std::make_unique<Rectangle>(72,144), 90);
+  Rotate rr(std::make_unique<Rect>(72,144), 90);
   REQUIRE (rr.width() == 144);
   REQUIRE (rr.height() == 72);
-  REQUIRE_THROWS (Rotate(std::make_unique<Rectangle>(72,144), 27));
+  REQUIRE_THROWS (Rotate(std::make_unique<Rect>(72,144), 27));
   write_ps_file("rotate", 
-    std::make_unique<Rotate>(std::make_unique<Rectangle>(72,144), 90));
+    std::make_unique<Rotate>(std::make_unique<Rect>(72,144), 90));
 }
 
 TEST_CASE( "Layered", "[Layered]" ) {
@@ -142,7 +142,7 @@ TEST_CASE( "Layered", "[Layered]" ) {
 
   for (int i = 0; i < 10; i++)
   {
-    vec2.push_back(std::move(std::make_unique<Polygon>(i+3, 72/4)));
+    vec2.push_back(std::move(std::make_unique<Poly>(i+3, 72/4)));
   }
   write_ps_file("layered", std::make_unique<Layered>(vec2));
 }
