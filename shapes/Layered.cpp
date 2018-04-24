@@ -2,33 +2,30 @@
 #include <sstream>
 
 Layered::Layered(std::vector<std::unique_ptr<Shape>> & shapes)
-{
-  for (auto & shape: shapes)
-  {
-    _shapes.push_back(std::move(shape));
-  }
-}
+  : Composite::Composite(shapes)
+{}
 
 std::string Layered::toPostScript() const
 {
-  std::ostringstream os;
+  return Composite::toPostScript();
+}
 
-  for (auto & shape : _shapes)
-  {
-    os<< "gsave %<Layered>" << std::endl
-      << shape->toPostScript()
-      << "grestore %</Layered>" << std::endl;
-  }
-  
-  return os.str();
+std::string Layered::toShape(unsigned int index) const
+{
+  return "";
+}
+
+std::string Layered::toCenter() const
+{
+  return "";
 }
 
 double Layered::width() const
 {
   double width = 0;
-  for (auto & shape : _shapes)
+  for (unsigned int i = 0; i < getShapeCount(); i++)
   {
-    if (shape->width() > width) width = shape->width();
+    if (getShapeWidth(i) > width) width = getShapeWidth(i);
   }
   return width;
 }
@@ -36,9 +33,9 @@ double Layered::width() const
 double Layered::height() const
 {
   double height = 0;
-  for (auto & shape : _shapes)
+  for (unsigned int i = 0; i < getShapeCount(); i++)
   {
-    if (shape->height() > height) height = shape->height();
+    if (getShapeHeight(i) > height) height = getShapeHeight(i);
   }
   return height;
 }

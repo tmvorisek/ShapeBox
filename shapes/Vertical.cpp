@@ -2,37 +2,35 @@
 #include <sstream>
 
 Vertical::Vertical(std::vector<std::unique_ptr<Shape>> & shapes)
-{
-  for (auto & shape: shapes)
-  {
-    _shapes.push_back(std::move(shape));
-  }
-}
+  : Composite::Composite(shapes)
+{}
 
 std::string Vertical::toPostScript() const
 {
+  return Composite::toPostScript();
+}
+
+std::string Vertical::toShape(unsigned int index) const
+{
   std::ostringstream os;
+  os  << " 0 " << (getShapeHeight(index) / 2) + (getShapeHeight(index + 1) / 2) 
+      << " translate" << std::endl;
+  return os.str();
+}
 
-  os << "gsave %<vertical>\n";
+std::string Vertical::toCenter() const
+{
+  std::ostringstream os;
   os << " 0 " << -height() / 2 << " translate\n"; //center object
-  for (int i = 0; i < _shapes.size(); ++i)
-  {
-    os << _shapes[i]->toPostScript();
-
-    if (i != _shapes.size() - 1)
-      os << " 0 " << (_shapes[i]->height() / 2) + (_shapes[i + 1]->height() / 2) << " translate\n";
-  }
-  os << "grestore %</vertical> \n";
-
   return os.str();
 }
 
 double Vertical::width() const
 {
   double width = 0;
-  for (auto & shape : _shapes)
+  for (unsigned int i = 0; i < getShapeCount(); i++)
   {
-    if (shape->width() > width) width = shape->width();
+    if (getShapeWidth(i) > width) width = getShapeWidth(i);
   }
   return width;
 }
@@ -40,9 +38,9 @@ double Vertical::width() const
 double Vertical::height() const
 {
   double height = 0;
-  for (auto & shape : _shapes)
+  for (unsigned int i = 0; i < getShapeCount(); i++)
   {
-    height += shape->height();
+    height += getShapeHeight(i);
   }
   return height;
 }

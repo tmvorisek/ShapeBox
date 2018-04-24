@@ -2,38 +2,35 @@
 #include <sstream>
 
 Horizontal::Horizontal(std::vector<std::unique_ptr<Shape>> & shapes)
-{
-  for (auto & shape: shapes)
-  {
-    _shapes.push_back(std::move(shape));
-  }
-}
+  : Composite::Composite(shapes)
+{}
 
 std::string Horizontal::toPostScript() const
 {
+  return Composite::toPostScript();
+}
+
+std::string Horizontal::toShape(unsigned int index) const
+{
   std::ostringstream os;
+  os  << (getShapeHeight(index) / 2) + (getShapeHeight(index + 1) / 2) 
+      << " 0 translate \n";
+  return os.str();
+}
 
-  os << "gsave %<horizontal> \n";
+std::string Horizontal::toCenter() const
+{
+  std::ostringstream os;
   os << -width() / 2 << " 0  translate \n";  //center the horizontal shape 
-  for (int i = 0; i < _shapes.size(); ++i)
-  {
-    os << _shapes[i]->toPostScript();
-
-    if (i != _shapes.size() - 1)
-      os  << (_shapes[i]->width() / 2) + (_shapes[i + 1]->width() / 2) 
-          << " 0 translate \n";
-  }
-  os << "grestore %</horizontal> \n";
-
   return os.str();
 }
 
 double Horizontal::width() const
 {
   double width = 0;
-  for (auto & shape : _shapes)
+  for (unsigned int i = 0; i < getShapeCount(); i++)
   {
-    width += shape->width();
+    width += getShapeWidth(i);
   }
   return width;
 }
@@ -41,10 +38,9 @@ double Horizontal::width() const
 double Horizontal::height() const
 {
   double height = 0;
-  for (auto & shape : _shapes)
+  for (unsigned int i = 0; i < getShapeCount(); i++)
   {
-    if (shape->height() > height) height = shape->height();
+    if (getShapeHeight(i) > height) height = getShapeHeight(i);
   }
   return height;
 }
-

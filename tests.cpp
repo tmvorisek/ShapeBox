@@ -81,7 +81,7 @@ TEST_CASE( "Vertical", "[Vertical]" ) {
   std::vector<std::unique_ptr<Shape>> vec,vec2;
   for (int i = 0; i < 10; i++)
   {
-    vec.push_back(std::move(std::make_unique<Circle>(72)));
+    vec.push_back(std::make_unique<Circle>(72));
   }
 
   Vertical vert(vec);
@@ -90,7 +90,7 @@ TEST_CASE( "Vertical", "[Vertical]" ) {
 
   for (int i = 0; i < 10; i++)
   {
-    vec2.push_back(std::move(std::make_unique<Circle>(10)));
+    vec2.push_back(std::make_unique<Circle>(10));
   }
   write_ps_file("vertical", std::make_unique<Vertical>(vec2));
 } 
@@ -99,7 +99,7 @@ TEST_CASE( "Horizontal", "[Horizontal]" ) {
   std::vector<std::unique_ptr<Shape>> vec, vec2;
   for (int i = 0; i < 10; i++)
   {
-    vec.push_back(std::move(std::make_unique<Polygon>(i+3,72/4)));
+    vec.push_back(std::make_unique<Polygon>(i+3,72/4));
   }
   Horizontal horz(vec);
   
@@ -108,7 +108,7 @@ TEST_CASE( "Horizontal", "[Horizontal]" ) {
 
   for (int i = 0; i < 10; i++)
   {
-    vec2.push_back(std::move(std::make_unique<Polygon>(i+3,72/4)));
+    vec2.push_back(std::make_unique<Polygon>(i+3,72/4));
   }
   write_ps_file("horizontal", std::make_unique<Horizontal>(vec2));
 } 
