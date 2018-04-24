@@ -5,11 +5,6 @@ Horizontal::Horizontal(std::vector<std::unique_ptr<Shape>> & shapes)
   : Composite::Composite(shapes)
 {}
 
-std::string Horizontal::toPostScript() const
-{
-  return Composite::toPostScript();
-}
-
 std::string Horizontal::toShape(unsigned int index) const
 {
   std::ostringstream os;

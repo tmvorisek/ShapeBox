@@ -5,11 +5,6 @@ Vertical::Vertical(std::vector<std::unique_ptr<Shape>> & shapes)
   : Composite::Composite(shapes)
 {}
 
-std::string Vertical::toPostScript() const
-{
-  return Composite::toPostScript();
-}
-
 std::string Vertical::toShape(unsigned int index) const
 {
   std::ostringstream os;

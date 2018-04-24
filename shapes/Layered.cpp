@@ -5,11 +5,6 @@ Layered::Layered(std::vector<std::unique_ptr<Shape>> & shapes)
   : Composite::Composite(shapes)
 {}
 
-std::string Layered::toPostScript() const
-{
-  return Composite::toPostScript();
-}
-
 std::string Layered::toShape(unsigned int index) const
 {
   return "";
