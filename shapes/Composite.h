@@ -16,5 +16,6 @@ public:
   virtual double getShapeHeight(unsigned int) const;
   virtual double width() const override = 0;
   virtual double height() const override = 0;
+private:
   const std::vector<std::unique_ptr<Shape>> _shapes;
 };
